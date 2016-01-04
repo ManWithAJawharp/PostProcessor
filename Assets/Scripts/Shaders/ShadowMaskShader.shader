@@ -2,12 +2,12 @@
 {
 	Properties
 	{
+		_MainTex("Main Texture (RGB)", 2D) = "white" {}
 	}
 
 	SubShader
 	{
-		ZWrite On
-		Tags{ "Queue" = "Overlay" "RenderType" = "Player" }
+		Tags{ "RenderType" = "Player" }
 
 		Pass
 		{
@@ -15,14 +15,18 @@
 
 			#pragma vertex vert
 			#pragma fragment frag
-			#include "UnityCG.cginc"
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+			};
 
 			struct v2f
 			{
 				fixed4 position : SV_POSITION;
 			};
 
-			v2f vert(appdata_base i)
+			v2f vert(appdata i)
 			{
 				v2f o;
 
@@ -40,12 +44,9 @@
 		}
 	}
 
-	Fallback "Diffuse"
-
 	SubShader
 	{
-		ZWrite On
-		Tags{ "Queue" = "Overlay" "RenderType" = "Opaque" }
+		Tags{ "RenderType" = "Opaque" }
 
 		Pass
 		{
@@ -53,14 +54,18 @@
 
 			#pragma vertex vert
 			#pragma fragment frag
-			#include "UnityCG.cginc"
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+			};
 
 			struct v2f
 			{
 				float4 position : SV_POSITION;
 			};
 
-			v2f vert(appdata_base i)
+			v2f vert(appdata i)
 			{
 				v2f o;
 
@@ -71,7 +76,7 @@
 
 			fixed4 frag(v2f i) : COLOR
 			{
-				return 0.5;
+				return 0;
 			}
 
 			ENDCG

@@ -43,6 +43,7 @@
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
 		}
+
 		ENDCG
 	}
 
