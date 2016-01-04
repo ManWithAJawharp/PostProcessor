@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CasterLamp : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject player;
 	[SerializeField]
 	private GameObject quad;
 
@@ -15,6 +17,8 @@ public class CasterLamp : MonoBehaviour
 
 	void OnEnable ()
 	{
+        Debug.Log("Enable " + name);
+
 		replaceShader = Shader.Find("Argia & Iluna/Shadows/Shadow Mask");
 
 		lampCamera = gameObject.AddComponent<Camera> ();
@@ -30,10 +34,12 @@ public class CasterLamp : MonoBehaviour
 		replaceCamera.enabled = false;
 	}
 
-	void Update ()
+	void FixedUpdate ()
 	{
+		LockOntoPlayer (player);
+
 		//  Initialize Render Textures.
-		mask = RenderTexture.GetTemporary(32, 32, 16, RenderTextureFormat.ARGBInt);
+		mask = RenderTexture.GetTemporary(16, 16, 16, RenderTextureFormat.ARGBInt);
 	    mask.filterMode = FilterMode.Point;
 		mask.Create();
 
@@ -59,5 +65,16 @@ public class CasterLamp : MonoBehaviour
 	{
 		DestroyImmediate(maskCamera);
 		//DestroyImmediate(mat);
+	}
+
+	private void LockOntoPlayer(GameObject player)
+	{
+		//  Set lamp in front of the player.
+		transform.position = player.transform.position + (transform.position.y - player.transform.position.y) / transform.forward.y * transform.forward;
+
+		//	Trim frustrum down to player's bounding box.
+		//Debug.Log (transform.eulerAngles.x);
+		//lampCamera.orthographicSize = 1f / Mathf.Cos(90 - transform.eulerAngles.x);
+		lampCamera.orthographicSize = Mathf.Max(0.8f, Vector3.Dot(transform.up, Vector3.up));
 	}
 }
