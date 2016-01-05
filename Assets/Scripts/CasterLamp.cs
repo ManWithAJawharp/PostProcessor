@@ -114,10 +114,10 @@ public class CasterLamp : MonoBehaviour
 		//  Set lamp in front of the player.
 		transform.position = player.transform.position + (transform.position.y - player.transform.position.y) / transform.forward.y * transform.forward;
 
-		//	Trim frustrum down to player's bounding box.
+        //	Trim frustrum down to player's bounding box.
 
-		//Debug.Log (transform.eulerAngles.x);
-		//lampCamera.orthographicSize = 1f / Mathf.Cos(90 - transform.eulerAngles.x);
-		lampCamera.orthographicSize = Mathf.Max(0.8f, Vector3.Dot(transform.up, Vector3.up));
+        //Debug.Log (transform.eulerAngles.x);
+        //lampCamera.orthographicSize = 1f / Mathf.Cos(90 - transform.eulerAngles.x);
+        lampCamera.orthographicSize = Mathf.Abs(Vector3.Dot(transform.up.normalized, 0.5f * Vector3.up)) + 0.5f;
 	}
 }
