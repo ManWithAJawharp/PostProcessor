@@ -37,7 +37,7 @@
 
 			fixed4 frag(v2f i) : COLOR
 			{
-				return 1;
+				return 0;
 			}
 				
 			ENDCG
@@ -76,7 +76,7 @@
 
 			fixed4 frag(v2f i) : COLOR
 			{
-				return 0;
+				return 1;
 			}
 
 			ENDCG
