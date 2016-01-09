@@ -10,7 +10,7 @@ public class CasterLamp : MonoBehaviour
 
     [SerializeField]
     private int resolution = 16;
-    [SerializeField]
+    [SerializeField, Range(0, 1)]
     private float treshold = 0.2f;
 
 	private Shader replaceShader;
@@ -56,7 +56,7 @@ public class CasterLamp : MonoBehaviour
         //  Set replaceCamera's variables.
         replaceCamera.CopyFrom(lampCamera);
         replaceCamera.clearFlags = CameraClearFlags.SolidColor;
-        replaceCamera.backgroundColor = Color.white;
+        replaceCamera.backgroundColor = Color.green;
         replaceCamera.targetTexture = mask;
 
         //  Render Shadow Mask pass.
@@ -70,42 +70,46 @@ public class CasterLamp : MonoBehaviour
 
         RenderTexture.active = null;
 
-        quad.GetComponent<Renderer>().material.mainTexture = resultImage;
+        //quad.GetComponent<Renderer>().material.mainTexture = resultImage;
 
         Color[] pixels = resultImage.GetPixels();
-        //Debug.Log("Maximum amount of pixels to check:   " + pixels.Length);
 
-        float output = 1;
+        int green = 0;
+        int red = 0;
+        int yellow = 0;
 
         foreach (Color pixel in pixels)
         {
-            output *= pixel.r;
-
-            if (output < treshold)
+            if (pixel.r != 0 && pixel.g != 0)
             {
-                Debug.Log("Player is visible.");
-                break;
+                yellow++;
+            }
+            else if (pixel.r != 0)
+            {
+                red++;
+            }
+            else if (pixel.g != 0)
+            {
+                green++;
             }
         }
-
-        if (output >= treshold)
-        {
-            Debug.Log("Player is not visible.");
-        }
-
+        
+        player.GetComponent<Renderer>().material.color = Color.Lerp(Color.blue, Color.red, (float)red / (pixels.Length - green));
+        
         //	Release and clear the RenderTextures.
         Camera.main.targetTexture = null;
         RenderTexture.ReleaseTemporary(mask);
         mask = null;
     }
 
-    void OnPostRender ()
+    void OnPreRender ()
     {
+        Debug.Log("PreRender");
     }
 
 	void OnDisable()
 	{
-		DestroyImmediate(maskCamera);
+		Destroy(maskCamera);
 		//DestroyImmediate(mat);
 	}
 
@@ -115,9 +119,6 @@ public class CasterLamp : MonoBehaviour
 		transform.position = player.transform.position + (transform.position.y - player.transform.position.y) / transform.forward.y * transform.forward;
 
         //	Trim frustrum down to player's bounding box.
-
-        //Debug.Log (transform.eulerAngles.x);
-        //lampCamera.orthographicSize = 1f / Mathf.Cos(90 - transform.eulerAngles.x);
         lampCamera.orthographicSize = Mathf.Abs(Vector3.Dot(transform.up.normalized, 0.5f * Vector3.up)) + 0.5f;
 	}
 }

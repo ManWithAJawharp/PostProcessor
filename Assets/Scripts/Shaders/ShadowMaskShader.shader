@@ -18,7 +18,7 @@
 
 			struct appdata
 			{
-				float4 vertex : POSITION;
+				fixed4 vertex : POSITION;
 			};
 
 			struct v2f
@@ -37,7 +37,7 @@
 
 			fixed4 frag(v2f i) : COLOR
 			{
-				return 0;
+				return fixed4(1, 0, 0, 1);
 			}
 				
 			ENDCG
@@ -46,7 +46,11 @@
 
 	SubShader
 	{
-		Tags{ "RenderType" = "Opaque" }
+		Tags{ "Queue" = "Transparent" "RenderType" = "Opaque" }
+
+		//BlendOp LogicalInvert
+		//BlendOp LogicalAnd
+		Blend SrcColor DstColor
 
 		Pass
 		{
@@ -57,12 +61,12 @@
 
 			struct appdata
 			{
-				float4 vertex : POSITION;
+				fixed4 vertex : POSITION;
 			};
 
 			struct v2f
 			{
-				float4 position : SV_POSITION;
+				fixed4 position : SV_POSITION;
 			};
 
 			v2f vert(appdata i)
@@ -76,7 +80,7 @@
 
 			fixed4 frag(v2f i) : COLOR
 			{
-				return 1;
+				return fixed4(0, 1, 0, 0);
 			}
 
 			ENDCG
