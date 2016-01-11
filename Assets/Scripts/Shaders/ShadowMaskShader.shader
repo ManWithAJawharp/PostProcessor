@@ -1,13 +1,8 @@
 ﻿Shader "Argia & Iluna/Shadows/Shadow Mask"
 {
-	Properties
-	{
-		_MainTex("Main Texture (RGB)", 2D) = "white" {}
-	}
-
 	SubShader
 	{
-		Tags{ "RenderType" = "Player" }
+		Tags { "RenderType" = "Player" }
 
 		Pass
 		{
@@ -37,7 +32,7 @@
 
 			fixed4 frag(v2f i) : COLOR
 			{
-				return fixed4(1, 0, 0, 1);
+				return fixed4(1, 0, 0, 0);
 			}
 				
 			ENDCG
@@ -48,8 +43,6 @@
 	{
 		Tags{ "Queue" = "Transparent" "RenderType" = "Opaque" }
 
-		//BlendOp LogicalInvert
-		//BlendOp LogicalAnd
 		Blend SrcColor DstColor
 
 		Pass
@@ -86,6 +79,4 @@
 			ENDCG
 		}
 	}
-
-	Fallback "Diffuse"
 }
