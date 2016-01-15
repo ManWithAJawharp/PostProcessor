@@ -1,4 +1,4 @@
-﻿Shader "Argia & Iluna/Shadows/Shadow Mask"
+﻿Shader "Hidden/Light ReplaceShader"
 {
 	SubShader
 	{

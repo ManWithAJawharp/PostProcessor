@@ -61,7 +61,7 @@ public class CasterLamp : MonoBehaviour
 	{
         Debug.Log("Enable " + name);
 
-		replaceShader = Shader.Find("Argia & Iluna/Shadows/Shadow Mask");
+		replaceShader = Shader.Find("Hidden/Light ReplaceShader");
 
 		lampCamera = gameObject.AddComponent<Camera> ();
 		lampCamera.orthographic = true;
