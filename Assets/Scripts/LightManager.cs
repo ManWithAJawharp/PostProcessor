@@ -13,7 +13,7 @@ public class LightManager : MonoBehaviour
     /////////////////////////
 
     [Header("Mode")]
-    [SerializeField, Tooltip("If true, the result of the replaceTexture render will be shown.")]
+    [SerializeField, Tooltip("If true, the result of the replaceTexture render will be shown (requires the debugQuad field to be set).")]
     private bool replaceShaderTestingMode = false;
 
     [Space, Header("Object References")]
@@ -21,6 +21,7 @@ public class LightManager : MonoBehaviour
     private GameObject[] players = new GameObject[2];
     [SerializeField]
     private Light sun;
+    [Space]
     [SerializeField]
     private GameObject debugQuad;
 
@@ -29,8 +30,6 @@ public class LightManager : MonoBehaviour
     float holdingTime = 0.05f;
     [SerializeField, Tooltip("Resolution of the rendered image.")]
     private int resolution = 16;
-    [SerializeField, Range(0, 1), Tooltip("Allowed ratio between between lit and unlit pixels on the player.")]
-    private float treshold = 0.2f;
 
     /////////////////////////////
     //  Non-Serialized Fields  //
@@ -52,15 +51,25 @@ public class LightManager : MonoBehaviour
 
     private static Shader replaceShader;
     
-    /// <summary>Texture to render the image unto.</summary>
+    /// <summary>RenderTexture to render the image unto.</summary>
     private RenderTexture renderTex;
     private static Texture2D resultImage;
-    private static bool isHoldingTexture;
     private static float timeHoldingTexture;
+
+    private static float[] lightShadowRatios;
+
+    public static float[] LightShadowRatios
+    {
+        get { return lightShadowRatios; }
+    }
+
+    //////////////////
+    //  Properties  //
+    //////////////////
 
     void Awake ()
     {
-        //  TODO: Subscribe to delegates (e.g.: StateManager).
+        //  TODO Subscribe to delegates (e.g.: StateManager).
 
         lights = new List<Light>();
         AddLight(sun);
@@ -85,9 +94,10 @@ public class LightManager : MonoBehaviour
         resultImage = new Texture2D(resolution, resolution, TextureFormat.RGB24, false);
         resultImage.filterMode = FilterMode.Point;
         resultImage.wrapMode = TextureWrapMode.Clamp;
-
-        isHoldingTexture = false;
+        
         timeHoldingTexture = 0f;
+
+        lightShadowRatios = new float[] { 1, 1 };
     }
 
     void LateUpdate()
@@ -100,21 +110,19 @@ public class LightManager : MonoBehaviour
 
             if (holdingTime == 0f)
             {
-                players[0].GetComponent<Renderer>().material.color = Color.Lerp(Color.blue, Color.red, AnalyseTexture());
+                players[0].GetComponent<Renderer>().material.color = Color.Lerp(Color.blue, Color.red, CalculateLightShadowRatio());
 
                 ReleaseTexture();
             }
         }
         else    //  Analyse the RenderTexture after it has been rendererd.
         {
-
             if (timeHoldingTexture >= holdingTime)
             {
                 timeHoldingTexture = 0f;
 
-                float shadowRatio = AnalyseTexture();
-                Debug.Log("Light " + currentLightIndex + "'s light to shadow ratio on player " + (currentPlayerIndex + 1) + ": " + shadowRatio);
-                //targetColor = new Color(shadowRatio, 0, 1 - shadowRatio, 1);
+                lightShadowRatios[currentPlayerIndex] = CalculateLightShadowRatio();
+                //Debug.Log("Light " + currentLightIndex + "'s light to shadow ratio on player " + (currentPlayerIndex + 1) + ": " + lightShadowRatios[currentPlayerIndex]);
 
                 ReleaseTexture();
             }
@@ -132,7 +140,7 @@ public class LightManager : MonoBehaviour
         lights.Add(light);
     }
 
-    public static void RemoveLight (Light light)
+    public static void RemoveLight(Light light)
     {
         lights.Remove(light);
     }
@@ -141,9 +149,7 @@ public class LightManager : MonoBehaviour
     //  Private Functions  //
     /////////////////////////
 
-    /// <summary>
-    /// Position the lamp in front of the player and adjust the camera frustum.
-    /// </summary>
+    /// <summary>Position the lamp in front of the player and adjust the camera frustum.</summary>
     /// <param name="player">Reference to the player object.</param>
 	private void LockOntoPlayer(GameObject player)
     {
@@ -154,13 +160,12 @@ public class LightManager : MonoBehaviour
             * lights[currentLightIndex].transform.forward;
         renderCameraObject.transform.rotation = lights[currentLightIndex].transform.rotation;
 
+
         //	Trim frustum down to player's bounding box.
         masterCamera.orthographicSize = Mathf.Abs(Vector3.Dot(lights[currentLightIndex].transform.up.normalized, 0.5f * Vector3.up)) + 0.5f;
     }
 
-    /// <summary>
-    /// Renders the view as seen from the lamp object.
-    /// </summary>
+    /// <summary>Renders the view as seen from the lamp object.</summary>
     private void RenderLightView()
     {
         //  Initialize Render Textures.
@@ -175,6 +180,8 @@ public class LightManager : MonoBehaviour
         renderCamera.backgroundColor = Color.green;
         renderCamera.targetTexture = renderTex;
 
+        //  TODO Make non-rendered player temporarily invisible.
+
         //  Render 
         renderCamera.RenderWithShader(replaceShader, "RenderType");
 
@@ -184,7 +191,7 @@ public class LightManager : MonoBehaviour
         //isHoldingTexture = true;
     }
 
-    private float AnalyseTexture()
+    private float CalculateLightShadowRatio()
     {
         //  Transfer RenderTexture data to Texture2D by reading it to the active RenderTexture.
         RenderTexture.active = renderTex;

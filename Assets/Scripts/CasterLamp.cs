@@ -16,8 +16,6 @@ public class CasterLamp : MonoBehaviour
     float holdingTime = 0.05f;
     [SerializeField, Tooltip("Resolution of RenderTexture.")]
     private int resolution = 16;
-    [SerializeField, Range(0, 1), Tooltip("Allowed ratio between between lit and unlit pixels on the player.")]
-    private float treshold = 0.2f;
 
     /////////////////////////////
     //  Non-Serialized Fields  //
@@ -45,11 +43,7 @@ public class CasterLamp : MonoBehaviour
     /// Resulting readable texture created from the RenderTexture.
     /// </summary>
     private Texture2D resultImage;
-
-    /// <summary>
-    /// True if a texture has been rendered unto, but isn't analysed yet.
-    /// </summary>
-    private bool isHoldingTexture;
+    
     /// <summary>
     /// Time in seconds the RenderTexture is being held.
     /// </summary>
@@ -79,8 +73,7 @@ public class CasterLamp : MonoBehaviour
         resultImage = new Texture2D(resolution, resolution, TextureFormat.RGB24, false);
         resultImage.filterMode = FilterMode.Point;
         resultImage.wrapMode = TextureWrapMode.Clamp;
-
-        isHoldingTexture = false;
+        
         timeHoldingTexture = 0f;
 
         targetColor = Color.red;
