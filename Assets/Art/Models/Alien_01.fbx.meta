@@ -1,0 +1,199 @@
+fileFormatVersion: 2
+guid: 6fb081275f0ef6d41ab9551f27e39818
+timeCreated: 1439497414
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Alien
+    100002: //RootNode
+    100004: Alien_rig
+    100006: Base
+    100008: Calve
+    100010: Foot
+    100012: Hat_1
+    100014: Hat_2
+    100016: Head_B
+    100018: Head_T
+    100020: Thigh
+    100022: Toe
+    400000: Alien
+    400002: //RootNode
+    400004: Alien_rig
+    400006: Base
+    400008: Calve
+    400010: Foot
+    400012: Hat_1
+    400014: Hat_2
+    400016: Head_B
+    400018: Head_T
+    400020: Thigh
+    400022: Toe
+    4300000: Alien
+    7400000: Idle
+    7400002: Wobble
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Alien
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Alien
+        weight: 1
+      - path: Alien_rig
+        weight: 1
+      - path: Alien_rig/Base
+        weight: 1
+      - path: Alien_rig/Base/Toe
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B/Head_T
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B/Head_T/Hat_1
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B/Head_T/Hat_1/Hat_2
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Wobble
+      takeName: Wobble
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Alien
+        weight: 1
+      - path: Alien_rig
+        weight: 1
+      - path: Alien_rig/Base
+        weight: 1
+      - path: Alien_rig/Base/Toe
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B/Head_T
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B/Head_T/Hat_1
+        weight: 1
+      - path: Alien_rig/Base/Toe/Foot/Calve/Thigh/Head_B/Head_T/Hat_1/Hat_2
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
