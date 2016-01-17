@@ -101,6 +101,11 @@ public class Player : MonoBehaviour
         get { return spawn.transform; }
     }
 
+    public bool Respawning
+    {
+        get { return state == States.Respawning; }
+    }
+
     //////////////////
     //  Delegates   //
     //////////////////
@@ -127,8 +132,8 @@ public class Player : MonoBehaviour
         avatar = transform.FindChild("Avatar");
         avatarDirection = transform.forward;
 
-        wasInShadow = isLightPlayer;
-        isInShadow = !isLightPlayer;
+        //wasInShadow = isLightPlayer;
+        //isInShadow = !isLightPlayer;
 
         health = deathDelay;
 	}
@@ -175,25 +180,40 @@ public class Player : MonoBehaviour
 
             characterController.Move(velocity);
 
-            if (isLightPlayer == isInShadow)
-            {
-                health -= Time.deltaTime;
+            //if (isLightPlayer == isInShadow)
+            //{
+            //    health -= Time.deltaTime;
 
-                if (health <= 0f)
+            //    if (health <= 0f)
+            //    {
+            //        if (advancedCollision)
+            //        {
+            //            if (collisionCount <= 1) Respawn();
+            //        }
+            //        else
+            //        {
+            //            Respawn();
+            //        }
+            //    }
+            //}
+            //else if (health < deathDelay)
+            //{
+            //    health += Time.deltaTime;
+            //}
+
+            if (isLightPlayer)
+            {
+                if (LightManager.LightShadowRatios[0] < 0.8f)
                 {
-                    if (advancedCollision)
-                    {
-                        if (collisionCount <= 1) Respawn();
-                    }
-                    else
-                    {
-                        Respawn();
-                    }
+                    Respawn();
                 }
             }
-            else if (health < deathDelay)
+            else
             {
-                health += Time.deltaTime;
+                if (LightManager.LightShadowRatios[1] > 0.2f)
+                {
+                    Respawn();
+                }
             }
 
             //  Rotate player in movement direction.
@@ -206,31 +226,31 @@ public class Player : MonoBehaviour
 
     void FixedUpdate ()
     {
-        if (state == States.Paused) return;
+        //if (state == States.Paused) return;
 
-        if (!advancedCollision)
-        {
-            if (isInShadow && !wasInShadow)         //  Entering the shadow.
-            {
-                if (OnPlayerEnterShadow != null)
-                {
-                    OnPlayerEnterShadow(isLightPlayer);
-                }
+        //if (!advancedCollision)
+        //{
+        //    if (isInShadow && !wasInShadow)         //  Entering the shadow.
+        //    {
+        //        if (OnPlayerEnterShadow != null)
+        //        {
+        //            OnPlayerEnterShadow(isLightPlayer);
+        //        }
 
-                wasInShadow = true;
-            }
-            else if (!isInShadow && wasInShadow)    //  Leaving the shadow.
-            {
-                if (OnPlayerExitShadow != null)
-                {
-                    OnPlayerExitShadow(isLightPlayer);
-                }
+        //        wasInShadow = true;
+        //    }
+        //    else if (!isInShadow && wasInShadow)    //  Leaving the shadow.
+        //    {
+        //        if (OnPlayerExitShadow != null)
+        //        {
+        //            OnPlayerExitShadow(isLightPlayer);
+        //        }
 
-                wasInShadow = false;
-            }
+        //        wasInShadow = false;
+        //    }
 
-            isInShadow = false;
-        }
+        //    isInShadow = false;
+        //}
     }
 
     void OnTriggerEnter (Collider col)
@@ -240,48 +260,48 @@ public class Player : MonoBehaviour
         {
             Respawn();
         }
-        else if (state == States.Playing && col.gameObject.layer == LayerMask.NameToLayer("Shadow"))
-        {
-            //Debug.Log("Entered new shadow.");
+        //else if (state == States.Playing && col.gameObject.layer == LayerMask.NameToLayer("Shadow"))
+        //{
+        //    //Debug.Log("Entered new shadow.");
 
-            collisionCount++;
-        }
+        //    collisionCount++;
+        //}
     }
 
     void OnTriggerStay (Collider col)
     {
-        if (state == States.Playing && col.gameObject.layer == LayerMask.NameToLayer("Shadow"))
-        {
-            if (isLightPlayer)  //  Light player immediately registers as 'in the shadow' when colliding with a shadow object.
-            {
-                isInShadow = true;
-            }
-            else  //  Shadow player only registers when its not touching the edges of a shadow object in advanced collision.
-            {
-                ExtrudeGeometry shadow = col.transform.parent.GetComponent<ExtrudeGeometry>();
+        //if (state == States.Playing && col.gameObject.layer == LayerMask.NameToLayer("Shadow"))
+        //{
+        //    if (isLightPlayer)  //  Light player immediately registers as 'in the shadow' when colliding with a shadow object.
+        //    {
+        //        isInShadow = true;
+        //    }
+        //    else  //  Shadow player only registers when its not touching the edges of a shadow object in advanced collision.
+        //    {
+        //        ExtrudeGeometry shadow = col.transform.parent.GetComponent<ExtrudeGeometry>();
 
-                if ((!advancedCollision && shadow != null) || (shadow != null && advancedCollision && !shadow.CheckTriangularCollision(characterController)))
-                {
-                    isInShadow = true;
-                }
-                else
-                {
-                    isInShadow = false;
-                }
-            }
-        }
-        else
-        {
-            //isInShadow = false;
-        }
+        //        if ((!advancedCollision && shadow != null) || (shadow != null && advancedCollision && !shadow.CheckTriangularCollision(characterController)))
+        //        {
+        //            isInShadow = true;
+        //        }
+        //        else
+        //        {
+        //            isInShadow = false;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    //isInShadow = false;
+        //}
     }
 
     void OnTriggerExit (Collider col)
     {
-        if (state == States.Playing && col.gameObject.layer == LayerMask.NameToLayer("Shadow"))
-        {
-            collisionCount--;
-        }
+        //if (state == States.Playing && col.gameObject.layer == LayerMask.NameToLayer("Shadow"))
+        //{
+        //    collisionCount--;
+        //}
     }
 
     void OnDrawGizmos ()

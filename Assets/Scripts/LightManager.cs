@@ -18,7 +18,7 @@ public class LightManager : MonoBehaviour
 
     [Space, Header("Object References")]
     [SerializeField]
-    private GameObject[] players = new GameObject[2];
+    private Player[] players = new Player[2];
     [SerializeField]
     private Light sun;
     [Space]
@@ -69,7 +69,7 @@ public class LightManager : MonoBehaviour
 
     void Awake ()
     {
-        //  TODO Subscribe to delegates (e.g.: StateManager).
+        State.OnStateChanged += State_OnStateChanged;
 
         lights = new List<Light>();
         AddLight(sun);
@@ -97,12 +97,14 @@ public class LightManager : MonoBehaviour
         
         timeHoldingTexture = 0f;
 
-        lightShadowRatios = new float[] { 1, 1 };
+        lightShadowRatios = new float[] { 1, 0 };
     }
 
     void LateUpdate()
     {
-        LockOntoPlayer(players[0]);
+        if (State.Current != State.States.Play) return;
+
+        LockOntoPlayer(players[currentPlayerIndex]);
 
         if (renderTex == null)  //  Render an image if the RenderTexture is empty.
         {
@@ -130,6 +132,15 @@ public class LightManager : MonoBehaviour
             timeHoldingTexture += Time.deltaTime;
         }
     }
+    
+    //////////////////////////
+    //  Delegate Functions  //
+    //////////////////////////
+
+    private void State_OnStateChanged(State.States previousState, State.States newState)
+    {
+        
+    }
 
     ////////////////////////
     //  Public Functions  //
@@ -151,7 +162,7 @@ public class LightManager : MonoBehaviour
 
     /// <summary>Position the lamp in front of the player and adjust the camera frustum.</summary>
     /// <param name="player">Reference to the player object.</param>
-	private void LockOntoPlayer(GameObject player)
+	private void LockOntoPlayer(Player player)
     {
         //  Set directional light in front of the player.
         renderCameraObject.transform.position = player.transform.position
@@ -184,6 +195,8 @@ public class LightManager : MonoBehaviour
 
         //  Render 
         renderCamera.RenderWithShader(replaceShader, "RenderType");
+        if (players[currentPlayerIndex].Respawning)
+            Debug.Break();
 
         if (replaceShaderTestingMode)
             debugQuad.GetComponent<Renderer>().material.mainTexture = renderTex;
